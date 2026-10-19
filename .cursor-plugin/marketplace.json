@@ -1,0 +1,17 @@
+{
+  "name": "zoeki-plugins",
+  "owner": {
+    "name": "Sevenshores Software",
+    "email": "support@zoeki.app"
+  },
+  "metadata": {
+    "description": "Zoeki: food, body and training log."
+  },
+  "plugins": [
+    {
+      "name": "zoeki",
+      "source": "./",
+      "description": "Log meals, weigh-ins, workouts and lifts in Zoeki, and ask about your nutrients and training."
+    }
+  ]
+}

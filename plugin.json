@@ -1,0 +1,57 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "zoeki",
+  "version": "1.0.0",
+  "description": "Log meals, weigh-ins, workouts and lifts in Zoeki, and ask about your nutrients and training.",
+  "author": {
+    "name": "Sevenshores Software",
+    "email": "support@zoeki.app",
+    "url": "https://zoeki.app"
+  },
+  "homepage": "https://zoeki.app",
+  "repository": "https://github.com/zoeki-app/agent-plugins",
+  "license": "MIT",
+  "keywords": [
+    "zoeki",
+    "nutrition",
+    "food log",
+    "calories",
+    "macros",
+    "micronutrients",
+    "weight",
+    "blood pressure",
+    "workouts",
+    "strength training",
+    "fitness",
+    "health",
+    "mcp"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Zoeki",
+        "shortDescription": "Food, body and training log",
+        "longDescription": "Zoeki is your own food, body and training log. Connect it and your assistant can log what you ate, drank or took, your weight and blood pressure, your workouts and lifts, and answer questions about your day, your week, your nutrients against published references, your body trends and your strength progress. You sign in to Zoeki and approve what the assistant may read and log, and you can disconnect it any time in Zoeki's settings.",
+        "developerName": "Sevenshores Software",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "websiteURL": "https://zoeki.app",
+        "supportURL": "https://zoeki.app/support",
+        "privacyPolicyURL": "https://zoeki.app/privacy",
+        "termsOfServiceURL": "https://zoeki.app/terms",
+        "defaultPrompt": [
+          "Log what I had for lunch",
+          "How is my protein this week?",
+          "Log today's workout"
+        ],
+        "brandColor": "#E8552F",
+        "brandColorDark": "#FF7A59",
+        "composerIcon": "./assets/composer-icon.svg",
+        "logo": "./assets/logo.png"
+      }
+    }
+  }
+}

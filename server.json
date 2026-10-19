@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "app.zoeki/zoeki",
+  "title": "Zoeki",
+  "description": "Log meals, weigh-ins, workouts and lifts in Zoeki, and ask about your nutrients and training.",
+  "version": "1.0.0",
+  "websiteUrl": "https://zoeki.app",
+  "repository": {
+    "url": "https://github.com/zoeki-app/agent-plugins",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://zoeki.app/icon-512.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://my.zoeki.app/mcp"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "zoeki",
+  "displayName": "Zoeki",
+  "version": "1.0.0",
+  "description": "Log meals, weigh-ins, workouts and lifts in Zoeki, and ask about your nutrients and training.",
+  "author": {
+    "name": "Sevenshores Software",
+    "email": "support@zoeki.app"
+  },
+  "homepage": "https://zoeki.app",
+  "repository": "https://github.com/zoeki-app/agent-plugins",
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "zoeki",
+    "nutrition",
+    "food log",
+    "calories",
+    "macros",
+    "micronutrients",
+    "weight",
+    "blood pressure",
+    "workouts",
+    "strength training",
+    "fitness",
+    "health",
+    "mcp"
+  ],
+  "category": "integrations",
+  "tags": [
+    "zoeki",
+    "nutrition",
+    "food-log",
+    "calories",
+    "macros",
+    "micronutrients",
+    "weight",
+    "blood-pressure",
+    "workouts",
+    "strength-training",
+    "fitness",
+    "health",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json"
+}

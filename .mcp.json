@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zoeki": {
+      "type": "http",
+      "url": "https://my.zoeki.app/mcp"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "zoeki",
+  "version": "1.0.0",
+  "description": "Log meals, weigh-ins, workouts and lifts in Zoeki, and ask about your nutrients and training.",
+  "mcpServers": {
+    "zoeki": {
+      "httpUrl": "https://my.zoeki.app/mcp",
+      "oauth": {
+        "enabled": true
+      }
+    }
+  }
+}
