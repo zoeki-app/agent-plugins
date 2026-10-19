@@ -7,7 +7,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT, loadSource, render } from './generate.mjs';
+import { CLAUDE_DIR, ROOT, loadSource, render } from './generate.mjs';
 
 const SCHEMAS = [
   {
@@ -40,8 +40,8 @@ const files = render(loadSource());
 for (const [path, expected] of Object.entries(files)) {
   const full = join(ROOT, path);
   if (!existsSync(full)) errors.push(`${path} is missing; run node scripts/generate.mjs`);
-  else if (readFileSync(full, 'utf8') !== expected)
-    errors.push(`${path} differs from zoeki.plugin.json; run node scripts/generate.mjs (don't edit it by hand)`);
+  else if (!readFileSync(full).equals(Buffer.from(expected)))
+    errors.push(`${path} differs from what scripts/generate.mjs writes; run it (don't edit generated files by hand)`);
 }
 
 // 2. Schemas.
@@ -68,11 +68,12 @@ for (const path of Object.keys(files).filter((p) => p.endsWith('.json') && !p.in
   if (v !== undefined && v !== version) errors.push(`${path} has version ${v}, expected ${version}`);
 }
 
-// 4. Every asset a manifest names exists.
+// 4. Every asset a manifest names exists, relative to its plugin's folder.
 for (const [path, contents] of Object.entries(files)) {
   if (!path.endsWith('.json')) continue;
+  const base = path.startsWith(`${CLAUDE_DIR}/`) ? CLAUDE_DIR : '';
   for (const [, asset] of contents.matchAll(/"(?:\.\/)?(assets\/[^"]+)"/g))
-    if (!existsSync(join(ROOT, asset))) errors.push(`${path} names ${asset}, which does not exist`);
+    if (!existsSync(join(ROOT, base, asset))) errors.push(`${path} names ${join(base, asset)}, which does not exist`);
 }
 
 for (const n of notes) console.log(`note: ${n}`);

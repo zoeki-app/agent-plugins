@@ -100,16 +100,17 @@ Zoeki describes where a value falls against a published reference. It is not med
 | Path | For |
 |---|---|
 | `plugin.json`, `mcp.json` | [Agent Plugins 1.0](https://agent-plugins.org): Codex and ChatGPT, Cursor, VS Code, Grok Build |
-| `.claude-plugin/` | Claude Code plugin and marketplace |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace |
+| `claude/` | The Claude Code plugin, with its own copies of the server, the agent and the logo |
 | `.cursor-plugin/` | Cursor Marketplace, which also serves Grok Bot |
 | `.agents/plugins/` | Codex marketplace |
-| `.mcp.json` | The server for Claude Code, Cursor and Grok Build |
+| `.mcp.json` | The server for Cursor and Grok Build |
 | `server.json` | MCP Registry (VS Code, GitHub Copilot, Zed) |
 | `gemini-extension.json` | Gemini CLI |
-| `agents/` | The Zoeki Coach role (Claude Code, Cursor and Grok Bot, Grok Build, Gemini CLI) |
+| `agents/` | The Zoeki Coach role (Cursor and Grok Bot, Grok Build, Gemini CLI; Claude Code's copy is in `claude/agents/`) |
 | `assets/` | Logos |
 
-Every manifest is generated from [`zoeki.plugin.json`](zoeki.plugin.json) by `node scripts/generate.mjs`. Don't edit them by hand: `node scripts/check.mjs` (run in CI) fails when a committed file differs from what the generator writes.
+Every manifest is generated from [`zoeki.plugin.json`](zoeki.plugin.json) by `node scripts/generate.mjs`, which also copies the logo into `claude/`. Don't edit them by hand: `node scripts/check.mjs` (run in CI) fails when a committed file differs from what the generator writes.
 
 ## Support
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Writes every manifest in this repository from zoeki.plugin.json.
+// Writes every manifest in this repository from zoeki.plugin.json, and copies
+// the logo into the Claude plugin folder.
 // Dependency-free on purpose: `node scripts/generate.mjs` is the whole build.
 // scripts/check.mjs calls render() and fails when a committed file differs.
 
@@ -8,6 +9,11 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+// The Claude Code plugin's own folder. Anthropic's directory scans everything
+// in a plugin folder as plugin code, and held the repository root for review
+// because of these scripts; claude/ holds only what the plugin needs.
+export const CLAUDE_DIR = 'claude';
 
 const AGENT_PLUGINS = 'https://agent-plugins.org/schemas/1.0.0';
 const MCP_REGISTRY_SCHEMA = 'https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json';
@@ -18,8 +24,9 @@ export function loadSource() {
   return JSON.parse(readFileSync(join(ROOT, 'zoeki.plugin.json'), 'utf8'));
 }
 
-// Every generated file, as { path: contents }. README.md is included with only
-// its install block replaced; the rest of it is hand-written.
+// Every generated file, as { path: contents }: a string, or a Buffer for a
+// copied image. README.md is included with only its install block replaced;
+// the rest of it is hand-written.
 export function render(src, readme = readFileSync(join(ROOT, 'README.md'), 'utf8')) {
   limits(src);
 
@@ -35,6 +42,17 @@ export function render(src, readme = readFileSync(join(ROOT, 'README.md'), 'utf8
   };
   const server = src.server;
   const role = src.role;
+  const claudeMcp = json({ mcpServers: { [server.key]: { type: 'http', url: server.url } } });
+  // Only name and description in the frontmatter: the one subset every reader accepts.
+  const agent = [
+    '---',
+    `name: ${role.name}`,
+    `description: ${JSON.stringify(role.description)}`,
+    '---',
+    '',
+    ...role.body,
+    '',
+  ].join('\n');
 
   return {
     // Agent Plugins 1.0: Codex and ChatGPT (via the com.openai extension), Cursor,
@@ -72,12 +90,13 @@ export function render(src, readme = readFileSync(join(ROOT, 'README.md'), 'utf8
       mcpServers: { [server.key]: { type: 'streamable-http', url: server.url } },
     }),
 
-    // Claude Code, Grok Build and the Cursor manifest below.
-    '.mcp.json': json({ mcpServers: { [server.key]: { type: 'http', url: server.url } } }),
+    // Grok Build and the Cursor manifest below.
+    '.mcp.json': claudeMcp,
 
-    // Claude Code ignores the listing fields (icon and the four URLs); Anthropic's
-    // directory reads them. The marketplace entry's "./" is the repo root itself.
-    '.claude-plugin/plugin.json': json({
+    // Claude Code: the marketplace at the root, the plugin in claude/ with its own
+    // server, agent and logo. Claude Code ignores the listing fields (icon and the
+    // four URLs); Anthropic's directory reads them.
+    [`${CLAUDE_DIR}/.claude-plugin/plugin.json`]: json({
       name: src.name,
       displayName: src.displayName,
       ...pick(shared, 'version', 'description'),
@@ -93,8 +112,11 @@ export function render(src, readme = readFileSync(join(ROOT, 'README.md'), 'utf8
       name: src.marketplace,
       owner: author,
       metadata: { description: `${src.displayName}: ${src.tagline.toLowerCase()}.` },
-      plugins: [{ name: src.name, source: './', description: src.description }],
+      plugins: [{ name: src.name, source: `./${CLAUDE_DIR}`, description: src.description }],
     }),
+    [`${CLAUDE_DIR}/.mcp.json`]: claudeMcp,
+    [`${CLAUDE_DIR}/agents/${role.name}.md`]: agent,
+    [`${CLAUDE_DIR}/${src.assets.logoPng}`]: readFileSync(join(ROOT, src.assets.logoPng)),
 
     // Cursor Marketplace, which Grok Bot installs from. Cursor's author has no url,
     // and mcpServers points at .mcp.json so it never picks up the Agent Plugins mcp.json.
@@ -153,17 +175,8 @@ export function render(src, readme = readFileSync(join(ROOT, 'README.md'), 'utf8
       mcpServers: { [server.key]: { httpUrl: server.url, oauth: { enabled: true } } },
     }),
 
-    // Claude Code, Cursor and Grok Bot, Grok Build and Gemini CLI read agents/*.md.
-    // Only name and description in the frontmatter: the one subset they all accept.
-    [`agents/${role.name}.md`]: [
-      '---',
-      `name: ${role.name}`,
-      `description: ${JSON.stringify(role.description)}`,
-      '---',
-      '',
-      ...role.body,
-      '',
-    ].join('\n'),
+    // Cursor and Grok Bot, Grok Build and Gemini CLI read agents/*.md.
+    [`agents/${role.name}.md`]: agent,
 
     'README.md': withInstallBlock(readme, installBlock(src)),
   };
