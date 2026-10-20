@@ -186,6 +186,8 @@ function installBlock(src) {
   const url = src.server.url;
   const key = src.server.key;
   const repo = new URL(src.repository).pathname.slice(1);
+  // Claude Code's built-in marketplace, which Anthropic's plugin directory publishes to.
+  const claudeDirectory = 'anthropic-plugin-directory';
   const claudeLink =
     'https://claude.ai/customize/connectors?modal=add-custom-connector' +
     `&connectorName=${encodeURIComponent(src.displayName)}&connectorUrl=${encodeURIComponent(url)}`;
@@ -204,16 +206,26 @@ ${url}
 
 ### Claude (web, Desktop, mobile and Cowork)
 
-[Add ${src.displayName} as a custom connector](${claudeLink}), then choose **Connect** and sign in.
+From Claude's directory (if available): open **Settings → Plugins**, search **Discover** for ${src.displayName} and add it, or open **Settings → Connectors**, find ${src.displayName} and choose **Connect**. Then sign in.
+
+Or [add ${src.displayName} as a custom connector](${claudeLink}), then choose **Connect** and sign in.
 
 ### Claude Code
+
+From the Anthropic Directory (if available):
+
+\`\`\`
+/plugin install ${src.name}@${claudeDirectory}
+\`\`\`
+
+Or from this repository:
 
 \`\`\`
 /plugin marketplace add ${repo}
 /plugin install ${src.name}@${src.marketplace}
 \`\`\`
 
-This also adds the Zoeki Coach agent. For the connection alone:
+Either plugin also adds the Zoeki Coach agent. For the connection alone:
 
 \`\`\`
 claude mcp add --transport http ${key} ${url}

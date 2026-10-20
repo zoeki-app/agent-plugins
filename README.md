@@ -19,16 +19,26 @@ https://my.zoeki.app/mcp
 
 ### Claude (web, Desktop, mobile and Cowork)
 
-[Add Zoeki as a custom connector](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Zoeki&connectorUrl=https%3A%2F%2Fmy.zoeki.app%2Fmcp), then choose **Connect** and sign in.
+From Claude's directory (if available): open **Settings → Plugins**, search **Discover** for Zoeki and add it, or open **Settings → Connectors**, find Zoeki and choose **Connect**. Then sign in.
+
+Or [add Zoeki as a custom connector](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Zoeki&connectorUrl=https%3A%2F%2Fmy.zoeki.app%2Fmcp), then choose **Connect** and sign in.
 
 ### Claude Code
+
+From the Anthropic Directory (if available):
+
+```
+/plugin install zoeki@anthropic-plugin-directory
+```
+
+Or from this repository:
 
 ```
 /plugin marketplace add zoeki-app/agent-plugins
 /plugin install zoeki@zoeki-plugins
 ```
 
-This also adds the Zoeki Coach agent. For the connection alone:
+Either plugin also adds the Zoeki Coach agent. For the connection alone:
 
 ```
 claude mcp add --transport http zoeki https://my.zoeki.app/mcp
